@@ -45,7 +45,6 @@ import static org.ops4j.pax.exam.MavenUtils.asInProject;
 import static org.ops4j.pax.exam.OptionUtils.combine;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.*;
 
-@RunWith(PaxExam.class)
 public class KarafBaseTest {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(KarafBaseTest.class);
@@ -81,7 +80,7 @@ public class KarafBaseTest {
 						.unpackDirectory(new File("target/paxexam/unpack/"))
 						.useDeployFolder(false)/*.runEmbedded(true), //only for debugging*/ ,
 
-				// KarafDistributionOption.debugConfiguration("5005", true),
+//				 KarafDistributionOption.debugConfiguration("5005", true),
 				configureConsole().ignoreLocalConsole(),
 				when(isEquinox()).useOptions(
 					editConfigurationFilePut(CustomProperties.KARAF_FRAMEWORK, "equinox"),
@@ -89,7 +88,7 @@ public class KarafBaseTest {
 					systemProperty("osgi.console").value("6666"),
 					systemProperty("osgi.console.enable.builtin").value("true")
 					),
-				logLevel(LogLevel.WARN),
+				logLevel(LogLevel.INFO),
 				keepRuntimeFolder(),
 				when(isKaraf4()).useOptions(
 						features(karafStandardFeature, "wrap")
@@ -112,16 +111,6 @@ public class KarafBaseTest {
 				mavenBundle().groupId("org.ops4j.pax.web.itest")
 				        .artifactId("pax-web-itest-base").versionAsInProject(),
 				//new ExamBundlesStartLevel(4),
-				// FIXME still needed ?
-				mavenBundle("org.apache.httpcomponents",
-						"httpcore-osgi").version(asInProject()),
-                mavenBundle("org.apache.httpcomponents",
-                        "httpclient-osgi").version(asInProject()),
-                mavenBundle("org.apache.httpcomponents",
-                        "httpasyncclient-osgi").version(asInProject()),
-				mavenBundle().groupId("commons-beanutils")
-						.artifactId("commons-beanutils").version(asInProject()),
-				// ---------------------------
 				mavenBundle().groupId("commons-collections")
 						.artifactId("commons-collections")
 						.version(asInProject()),
@@ -139,11 +128,6 @@ public class KarafBaseTest {
 						.artifactId(
 								"org.apache.servicemix.specs.jsr303-api-1.0.0")
 						.version(asInProject()),
-				// FIXME necessary to get rid of ClassNotFoundException
-				mavenBundle().groupId("org.eclipse.jetty.websocket").artifactId("websocket-api").version("9.3.6.v20151106"),
-				mavenBundle().groupId("org.eclipse.jetty.websocket").artifactId("websocket-common").version("9.3.6.v20151106"),
-				mavenBundle().groupId("org.eclipse.jetty").artifactId("jetty-io").version("9.3.6.v20151106"),
-				mavenBundle().groupId("org.eclipse.jetty").artifactId("jetty-util").version("9.3.6.v20151106"),
 				// Jetty HttpClient for testing
 				mavenBundle().groupId("org.eclipse.jetty").artifactId("jetty-client").versionAsInProject()
 		};
