@@ -131,7 +131,7 @@ public class WebFragmentIntegrationTest extends ITestBase {
 				.withReturnCode(404)
 				.withResponseAssertion("Response must contain '<h1>Error Page</h1>'",
 						resp -> resp.contains("<h1>Error Page</h1>"))
-				.doGETandExecuteTest("http://127.0.0.1:8181/test");
+				.doGETandExecuteTest("http://127.0.0.1:8181/war/wc/error.jsp");
 
 //		testClient.testWebPath("http://127.0.0.1:8181/war/wc/error.jsp", "<h1>Error Page</h1>", 404, false);
 	}
