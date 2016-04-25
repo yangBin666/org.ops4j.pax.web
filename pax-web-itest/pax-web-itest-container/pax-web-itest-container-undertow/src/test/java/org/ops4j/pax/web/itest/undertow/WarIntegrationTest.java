@@ -173,8 +173,6 @@ public class WarIntegrationTest extends ITestBase {
 	public void testSlash() throws Exception {
 		HttpTestClientFactory.createDefaultTestClient()
 				.withReturnCode(403)
-				.withResponseAssertion("Response must contain '<h1>Error Page</h1>'",
-						resp -> resp.contains("<h1>Error Page</h1>"))
 				.doGETandExecuteTest("http://127.0.0.1:8181/war/");
 
 //		testClient.testWebPath("http://127.0.0.1:8181/war/", "<h1>Error Page</h1>", 403, false);
