@@ -71,7 +71,7 @@ public class WarManualIntegrationTest extends KarafBaseTest {
 	public void testManual() throws Exception {
 		createTestClientForKaraf()
 				.withResponseAssertion("Response must contain text from Pax-Web-Manuel served by Karaf!",
-						resp -> resp.contains("<title>Pax Web</title>"))
+						resp -> resp.contains("<title>Pax Web " + VersionUtil.getProjectVersion() + "</title>"))
 				.doGETandExecuteTest("http://127.0.0.1:8181/pax-web-manual");
 	}
 
