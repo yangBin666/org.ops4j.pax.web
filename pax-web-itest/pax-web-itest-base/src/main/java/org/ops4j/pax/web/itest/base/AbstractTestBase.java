@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.*;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.ConnectException;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.concurrent.TimeUnit;
@@ -156,7 +157,9 @@ public abstract class AbstractTestBase {
                             .withReturnCode(200, 404)
                             .doGET(path).executeTest();
                     return true;
-                }catch(AssertionError e){
+                } catch(AssertionError e){
+                    return false;
+                } catch(Exception e) {
                     return false;
                 }
             }

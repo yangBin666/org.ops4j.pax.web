@@ -38,6 +38,7 @@ import java.net.URL;
 import java.security.KeyStore;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -247,12 +248,13 @@ class JettyTestClient implements HttpTestClient {
 							authDefinition.user,
 							authDefinition.password));
 		}
-
-		httpClient.start();
+		LOG.info("starting httpClient");
+	    httpClient.start();
 		final ResultWrapper resultWrapper = new ResultWrapper();
 		try {
 
 			if (async) {
+			    LOG.info("calling asynchronous ... ");
 				CompletableFuture<Result> future = new CompletableFuture<>();
 				request.send(new BufferingResponseListener() {
 					@Override
@@ -273,18 +275,24 @@ class JettyTestClient implements HttpTestClient {
 
 
 			} else {
+			    LOG.info("calling synchronous");
 				ContentResponse contentResponse = request.send();
 				resultWrapper.content = new String(contentResponse.getContent());
 				resultWrapper.contentType = contentResponse.getMediaType() != null ? contentResponse.getMediaType() : "";
 				resultWrapper.httpStatus = contentResponse.getStatus();
 				resultWrapper.headers = extractHeadersFromResponse(contentResponse);
 				if(httpState.isPresent()) {
+				    LOG.info("storing state in cookie");
 					Map<String, String> cookies = extractCockiesFromResponse(contentResponse);
 					httpState.get().putAll(cookies);
 				}
 
 			}
+		} catch (ExecutionException e) {
+		    LOG.info("caught exception from client call: ",e);
+		    throw (Exception) e.getCause();
 		} finally {
+		    LOG.info("stopping client");
 			httpClient.stop();
 		}
 
